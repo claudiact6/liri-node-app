@@ -25,11 +25,18 @@ function takeCommand(command, searchTerm) {
     switch(command) {
         case "concert-this":
             //Search BandsInTown API for artist to provide venue name, location, and date of all upcoming concerts.
-            var queryUrl = "https://rest.bandsintown.com/artists/" + searchTerm + "/events?app_id=codingbootcamp"
+            var queryUrl = "https://rest.bandsintown.com/artists/Brandi%20Carlile/events?app_id=codingbootcamp"
+            console.log(queryUrl);
             request(queryUrl, function (error, response, body) {
                 // If the request is successful
                 if (!error && response.statusCode === 200) {
-                    console.log(JSON.parse(body));
+                    var concert = JSON.parse(body);
+                    console.log("---Upcoming concerts---")
+                    for(i = 0; i < concert.length; i++) {
+                        console.log(concert[i].lineup + " at " + concert[i].venue.name);
+                        console.log(concert[i].datetime);
+                        console.log(concert[i].venue.city + ", " + concert[i].venue.region);
+                    }
                 }
             });
             break;
@@ -39,7 +46,6 @@ function takeCommand(command, searchTerm) {
         case "movie-this":            
             //Search the OMDB API to show movie title, release year, IMDB rating, Rotten Tomatoes rating, country where the movie was produced, language of the movie, plot summary, and actors.
             var queryUrl = "http://www.omdbapi.com/?t=" + searchTerm + "&y=&plot=short&apikey=trilogy";
-            console.log(queryUrl);
             request(queryUrl, function (error, response, body) {
                 // If the request is successful
                 if (!error && response.statusCode === 200) {
