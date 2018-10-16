@@ -1,8 +1,8 @@
 require("dotenv").config();
 var request = require("request");
 var fs = require("fs");
-/* var keys = require("keys.js");
-var spotify = new Spotify(keys.spotify); */
+var keys = require("./keys");
+var spotify = new Spotify(keys.spotify);
 var command = process.argv[2];
 console.log(command);
 var searchTerm = "";
@@ -41,7 +41,9 @@ function takeCommand(command, searchTerm) {
             request(queryUrl, function (error, response, body) {
                 // If the request is successful
                 if (!error && response.statusCode === 200) {
-                    console.log(JSON.parse(body));
+                    console.log("---" + JSON.parse(body).Title + "---");
+                    console.log("Released in ",JSON.parse(body).Year);
+                    console.log("Rated ",JSON.parse(body).Rating);
                 }
             });
             break;
