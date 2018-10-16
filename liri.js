@@ -2,6 +2,7 @@ require("dotenv").config();
 var request = require("request");
 var fs = require("fs");
 var keys = require("./keys");
+var Spotify = require('node-spotify-api')
 var spotify = new Spotify(keys.spotify);
 var command = process.argv[2];
 console.log(command);
@@ -38,12 +39,19 @@ function takeCommand(command, searchTerm) {
         case "movie-this":            
             //Search the OMDB API to show movie title, release year, IMDB rating, Rotten Tomatoes rating, country where the movie was produced, language of the movie, plot summary, and actors.
             var queryUrl = "http://www.omdbapi.com/?t=" + searchTerm + "&y=&plot=short&apikey=trilogy";
+            console.log(queryUrl);
             request(queryUrl, function (error, response, body) {
                 // If the request is successful
                 if (!error && response.statusCode === 200) {
-                    console.log("---" + JSON.parse(body).Title + "---");
-                    console.log("Released in ",JSON.parse(body).Year);
-                    console.log("Rated ",JSON.parse(body).Rating);
+                    var movie = JSON.parse(body);
+                    console.log("---" + movie.Title + "---");
+                    console.log("Released in", movie.Year);
+                    console.log(movie.Ratings[0].Source + " rating: " + movie.Ratings[0].Value);
+                    console.log(movie.Ratings[1].Source + " rating: " + movie.Ratings[1].Value);
+                    console.log("Produced in", movie.Country);
+                    console.log("Language:", movie.Language);
+                    console.log("Leading actors:", movie.Actors);
+                    console.log("Summary:",movie.Plot);
                 }
             });
             break;
