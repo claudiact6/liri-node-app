@@ -5,7 +5,6 @@ var keys = require("./keys");
 var Spotify = require('node-spotify-api')
 var spotify = new Spotify(keys.spotify);
 var command = process.argv[2];
-console.log("command:", command);
 var searchTerm = "";
 
 //If there is a search term, assign it to a variable
@@ -23,7 +22,6 @@ if (command === "movie-this" && searchTerm === "") {
     searchTerm = "I Saw the Sign";
 }
 
-console.log("search term:", searchTerm);
 takeCommand(command, searchTerm);
 
 function takeCommand(command, searchTerm) {
@@ -31,7 +29,6 @@ function takeCommand(command, searchTerm) {
         case "concert-this":
             //Search BandsInTown API for artist to provide venue name, location, and date of all upcoming concerts.
             var queryUrl = "https://rest.bandsintown.com/artists/" + searchTerm + "/events?app_id=codingbootcamp"
-            console.log(queryUrl);
             request(queryUrl, function (error, response, body) {
                 // If the request is successful
                 if (!error && response.statusCode === 200) {
@@ -47,13 +44,11 @@ function takeCommand(command, searchTerm) {
             break;
         case "spotify-this-song":
             //Search Spotify for the song and return song name, artist(s), preview link of the song, and the album that the song is from
-            console.log("searching for:",searchTerm)
-            spotify.search({ type: 'track', query: "I%20saw%20the%20sign", limit: 1 }, function (err, data) {
+            spotify.search({ type: 'track', query: searchTerm, limit: 1 }, function (err, data) {
                 if (err) {
                     return console.log('Error occurred: ' + err);
                 }
                 var song = data.tracks.items[0];
-                console.log(song);
                 console.log("---" + song.name + "---");
                 console.log("As sung by:",song.artists[0].name);
                 console.log("On the album:",song.album.name);
@@ -82,9 +77,7 @@ function takeCommand(command, searchTerm) {
         case "do-what-it-says":
             //Do what "random.txt" says.
             fs.readFile("random.txt", "utf8", function (error, data) {
-                console.log(data);
                 var splitFile = data.split(",");
-                console.log(splitFile);
                 takeCommand(splitFile[0], splitFile[1]);
             });
             break;
