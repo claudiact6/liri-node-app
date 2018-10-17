@@ -1,5 +1,6 @@
 require("dotenv").config();
 var request = require("request");
+var moment = require("moment");
 var fs = require("fs");
 var keys = require("./keys");
 var Spotify = require('node-spotify-api')
@@ -36,7 +37,9 @@ function takeCommand(command, searchTerm) {
                     console.log("---Upcoming concerts---")
                     for (i = 0; i < concert.length; i++) {
                         console.log(concert[i].lineup + " at " + concert[i].venue.name);
-                        console.log(concert[i].datetime);
+                        var time = concert[i].datetime;
+                        var parsedTime = moment(time).format("MM/DD/YYYY");
+                        console.log(parsedTime);
                         console.log(concert[i].venue.city + ", " + concert[i].venue.region);
                     }
                 }
